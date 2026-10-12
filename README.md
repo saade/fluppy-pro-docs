@@ -4,7 +4,7 @@
     <img src="https://raw.githubusercontent.com/saade/fluppy-pro-docs/main/art/cover.png" alt="Fluppy Pro: AI image generation, ready-made sources and your own" style="width: 100%; max-width: 800px; border-radius: 10px" />
 </p>
 
-Fluppy Pro adds an AI image generator, custom sources and ready-made sources to [Fluppy](https://github.com/saade/fluppy), the Uppy upload field for [Filament](https://filamentphp.com) forms:
+Fluppy Pro adds an AI image generator, custom sources and ready-made sources to [Fluppy](https://filamentphp.com/plugins/saade-fluppy), the Uppy upload field for [Filament](https://filamentphp.com) forms:
 
 - AI image generation, using the Laravel AI SDK or your own generator
 - Custom sources, written as a class and a Blade view
@@ -50,7 +50,27 @@ Fluppy Pro adds an AI image generator, custom sources and ready-made sources to 
 
 ## Installation
 
-Fluppy Pro requires PHP 8.2 or later. First, install the package via Composer. It installs [Fluppy](https://github.com/saade/fluppy) with it, so you don't need to require both:
+Fluppy Pro requires PHP 8.2 or later, and a license, which you can purchase on the [Filament website](https://filamentphp.com/plugins/saade-fluppy-pro).
+
+The package is distributed through a private Composer repository. First, add the repository to your project:
+
+```bash
+composer config repositories.saade composer https://saade.privato.pub/composer
+```
+
+Next, authenticate using the email address you purchased with and your license key:
+
+```bash
+composer config --auth http-basic.saade.privato.pub "<EMAIL>" "<KEY>"
+```
+
+This saves your credentials to `auth.json`, which you should not commit to version control. In CI, you can provide the same credentials using the `COMPOSER_AUTH` environment variable:
+
+```bash
+COMPOSER_AUTH='{"http-basic":{"saade.privato.pub":{"username":"<EMAIL>","password":"<KEY>"}}}'
+```
+
+Then, install the package via Composer. It installs [Fluppy](https://filamentphp.com/plugins/saade-fluppy) with it, so you don't need to require both:
 
 ```bash
 composer require saade/fluppy-pro:"^1.0"
@@ -81,7 +101,7 @@ php artisan vendor:publish --tag="fluppy-pro-config"
 
 ## Usage
 
-Fluppy Pro has its own `FluppyField`, which extends Fluppy's and adds the methods that are documented below. You can use it anywhere you would use Fluppy's field, and everything in [Fluppy's documentation](https://github.com/saade/fluppy#readme) applies to it:
+Fluppy Pro has its own `FluppyField`, which extends Fluppy's and adds the methods that are documented below. You can use it anywhere you would use Fluppy's field, and everything in [Fluppy's documentation](https://filamentphp.com/plugins/saade-fluppy) applies to it:
 
 ```php
 use Saade\FluppyPro\Forms\Components\FluppyField;
@@ -337,7 +357,7 @@ You should use Alpine.js for the view's behavior, and not `wire:` attributes, si
 
 ### Adding files from the server
 
-The `addFiles()` method passes a file through the browser: it is downloaded there and uploaded from there. This is suitable for a file that the view has just created. However, if the file is already on one of your disks, is at a URL that only your server should reach, or is too large to pass through the browser, the view should only tell the server which file to add. The server then downloads it to the temporary disk in parts, like Fluppy does when [importing from a URL](https://github.com/saade/fluppy#importing-files-from-a-url).
+The `addFiles()` method passes a file through the browser: it is downloaded there and uploaded from there. This is suitable for a file that the view has just created. However, if the file is already on one of your disks, is at a URL that only your server should reach, or is too large to pass through the browser, the view should only tell the server which file to add. The server then downloads it to the temporary disk in parts, like Fluppy does when [importing from a URL](https://filamentphp.com/plugins/saade-fluppy#importing-files-from-a-url).
 
 To do this, the source must also be a remote source, by implementing Fluppy's `Saade\Fluppy\Sources\Source` interface. The interface adds three methods:
 
@@ -477,7 +497,7 @@ FluppyField::make('reaction')
     ])
 ```
 
-This adds a "GIFs" button to the field. It shows the GIFs that are trending until the user searches for something. When a GIF is selected, it is downloaded by your server, with the same [SSRF protection](https://github.com/saade/fluppy#protecting-against-server-side-request-forgery) as a user-supplied URL, and only from GIPHY's own hosts.
+This adds a "GIFs" button to the field. It shows the GIFs that are trending until the user searches for something. When a GIF is selected, it is downloaded by your server, with the same [SSRF protection](https://filamentphp.com/plugins/saade-fluppy#protecting-against-server-side-request-forgery) as a user-supplied URL, and only from GIPHY's own hosts.
 
 > [!WARNING]
 > `GiphySource` has been tested against a mock of GIPHY's API, and not yet against GIPHY itself. If it does not work with your API key, please open an issue.
@@ -567,7 +587,7 @@ FluppyField::make('cover')
     ])
 ```
 
-This adds a "Stock photos" button to the field. Photos are searched in [Openverse](https://openverse.org), which requires no API key, and the selected photo is downloaded by your server with the same [SSRF protection](https://github.com/saade/fluppy#protecting-against-server-side-request-forgery) as a user-supplied URL.
+This adds a "Stock photos" button to the field. Photos are searched in [Openverse](https://openverse.org), which requires no API key, and the selected photo is downloaded by your server with the same [SSRF protection](https://filamentphp.com/plugins/saade-fluppy#protecting-against-server-side-request-forgery) as a user-supplied URL.
 
 Each photo is shown with its author and license. The licenses differ, and many of them require attribution, so your users should check the license of a photo before publishing it.
 
@@ -752,7 +772,7 @@ SpatieMediaLibraryFluppyField::make('attachments')
 
 ## Security
 
-Everything in the [Security](https://github.com/saade/fluppy#security) section of Fluppy's documentation applies. Before using these features on a publicly accessible form, you should also be aware of the following.
+Everything in the [Security](https://filamentphp.com/plugins/saade-fluppy#security) section of Fluppy's documentation applies. Before using these features on a publicly accessible form, you should also be aware of the following.
 
 ### Image generation
 
